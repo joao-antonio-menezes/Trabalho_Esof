@@ -1,0 +1,6 @@
+descricao,data_criacao,status,projeto_id
+Definir requisitos do Produto X,2024-03-15,True,1
+Desenvolver protótipo inicial,2024-03-16,False,1
+Testar integração com sistema de pagamentos,2024-03-16,True,2
+Realizar pesquisa de mercado,2024-03-17,True,3
+Desenvolver plano de marketing,2024-03-17,False,3

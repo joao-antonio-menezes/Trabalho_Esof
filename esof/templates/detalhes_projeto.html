@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Projeto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container-detalhes">
+        <div class="cabecalho">
+            <h1>Detalhes do Projeto</h1>
+            <h2>{{ projeto.nome }}</h2>
+            <p>{{ projeto.descricao }}</p>
+        </div>
+        
+        <div class="tarefas">
+            <div class="bloco-tarefa">
+                <h2>Tarefas Concluídas</h2>
+                <div class="task-list completed-tasks">
+                    {% for tarefa in tarefas_concluidas %}
+                    <div class="task completed" data-task-id="{{ tarefa[0] }}">
+                        <p>{{ tarefa[1] }}</p>
+                    </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                    
+            <div class="bloco-tarefa">
+                <h2>Tarefas Não Concluídas</h2>
+                <div class="task-list incomplete-tasks">
+                    {% for tarefa in tarefas_nao_concluidas %}
+                    <div class="task" data-task-id="{{ tarefa[0] }}">
+                        <p>{{ tarefa[1] }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <form action="{{ url_for('adicionar_tarefa', projeto_id=projeto.id) }}" method="post" class="form-group">
+            <label for="descricao">Adicionar Tarefa:</label>
+            <input type="text" name="descricao" id="descricao">
+            <button type="submit" class="btn">Adicionar</button>
+        </form>
+    
+        <div class="bloco-botoes">
+            <p><a href="{{ url_for('editar_projeto', projeto_id=projeto.id) }}" class="btn">Editar</a></p>
+            <form action="{{ url_for('excluir_projeto', projeto_id=projeto.id) }}" method="post" class="form-group" id="form-excluir-projeto">
+                <button type="button" class="btn" id="btn-excluir-projeto">Excluir Projeto</button>
+            </form>
+            <p><a href="{{ url_for('index') }}" class="btn">Voltar</a></p>
+        </div>
+    </div>
+    
+    <script>
+        const tasks = document.querySelectorAll('.task');
+        tasks.forEach(task => {
+            task.addEventListener('click', () => {
+                const taskId = task.getAttribute('data-task-id');
+                fetch('/marcar_tarefa_concluida', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `tarefa_id=${taskId}`,
+                })
+                .then(response => {
+                    if (response.ok) {
+                        task.classList.toggle('completed');
+                        if (task.classList.contains('completed')) {
+                            document.querySelector('.completed-tasks').appendChild(task);
+                        } else {
+                            document.querySelector('.incomplete-tasks').appendChild(task);
+                        }
+                    } else {
+                        console.error('Falha ao marcar a tarefa como concluída');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao realizar a requisição:', error);
+                });
+            });
+        });
+
+        document.getElementById('btn-excluir-projeto').addEventListener('click', function() {
+            var confirmacao = confirm("Tem certeza que deseja excluir este projeto?");
+            if (confirmacao) {
+                document.getElementById('form-excluir-projeto').submit();
+            }
+        });
+    
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Projeto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Projeto</h1>
+        <form action="{{ url_for('editar_projeto', projeto_id=projeto.id) }}" method="post" class="form-group">
+            <label for="nome">Nome:</label>
+            <input type="text" name="novo_nome" id="nome" value="{{ projeto.nome }}" required>
+            <label for="descricao">Descrição:</label>
+            <textarea name="nova_descricao" id="descricao" class="styled-textarea" required>{{ projeto.descricao }}</textarea>
+            <button type="submit" class="btn">Salvar</button>
+        </form>
+        <div class="center-btn"> 
+            <p><a href="{{ url_for('detalhes_projeto', projeto_id=projeto.id) }}" class="btn">Cancelar</a></p>
+        </div>
+    </div>
+
+</body>
+</html>
+<!DOCTYPE html>
+    
